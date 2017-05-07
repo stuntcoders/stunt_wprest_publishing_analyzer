@@ -21,3 +21,5 @@ Script is assuming website is running under https, so if particular website you 
 ```
 wpanalyzer example.com http
 ```
+
+Copyright [StuntCoders](https://stuntcoders.com/)

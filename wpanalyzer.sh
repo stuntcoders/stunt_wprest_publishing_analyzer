@@ -39,6 +39,8 @@ mv $TEMP_FILE $STORAGE_FILE
 mv $STORAGE_FILE data.csv
 csvsql --query "SELECT Date, COUNT(*) AS 'Posts count' FROM data GROUP BY Date" data.csv > $STORAGE_FILE && rm data.csv
 
+MEDI=`csvstat -c 2 --mean $STORAGE_FILE | awk '{print int($1)}'`
+
 # Add missing dates from 2010 on
 for year in `seq 2010 $(date +'%Y')`; do
     for month in `seq 01 12`; do
@@ -54,8 +56,10 @@ done
 csvsort -c 1 --reverse $STORAGE_FILE > $TEMP_FILE
 mv $TEMP_FILE $STORAGE_FILE
 
+echo "----------------"
 echo "Median edits per article: $MEDIAN_EDIT_PER_ARTICLE"
 echo "Total number of articles: $COUN"
+echo "Median articles pr month: $MEDI"
 
 echo "----------------"
 echo "CSV with number of articles published per month can be found in following file: $STORAGE_FILE"

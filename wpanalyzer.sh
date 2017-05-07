@@ -47,7 +47,7 @@ for year in `seq 2010 $(date +'%Y')`; do
         DATEZ="$year-$(printf "%02d" $month)"
 
         if [ "$DATEZ" \< "$CURRENT_Y_MONTH" ]; then
-        	if [ ! -z $(grep "$DATEZ" "$STORAGE_FILE") ]; then D=1; else echo "$DATEZ,0" >> $STORAGE_FILE; fi
+            if [ ! -z $(grep "$DATEZ" "$STORAGE_FILE") ]; then D=1; else echo "$DATEZ,0" >> $STORAGE_FILE; fi
         fi
     done
 done

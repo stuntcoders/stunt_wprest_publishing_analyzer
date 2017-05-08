@@ -110,11 +110,13 @@ tail -n +2 $STORAGE_FILE > $TEMP_FILE
 
 gnuplot << EOF
 set terminal png
-set output 'stuntcoders.com.csv.png'
+set output '$STORAGE_FILE.png'
 set style data linespoints
 set datafile separator ','
 plot '$TEMP_FILE'
 EOF
+rm $TEMP_FILE
 
 echo "----------------"
-echo "CSV with number of articles published per month can be found in following file: $STORAGE_FILE"
+echo "CSV with number of articles published per month can be found in following file: $(green)$STORAGE_FILE$(normalize)"
+echo "Graph can be found here: $(green)$STORAGE_FILE.png$(normalize)"

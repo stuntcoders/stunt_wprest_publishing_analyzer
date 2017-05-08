@@ -1,5 +1,50 @@
 #!/bin/bash
 
+ISTTY=0; if [ -t 1 ]; then ISTTY=1; fi
+bold ()      { if [ $ISTTY -eq 1 ]; then tput bold;     fi; }
+red ()       { if [ $ISTTY -eq 1 ]; then tput setaf 1;  fi; }
+green ()     { if [ $ISTTY -eq 1 ]; then tput setaf 2;  fi; }
+yellow ()    { if [ $ISTTY -eq 1 ]; then tput setaf 3;  fi; }
+cyan ()      { if [ $ISTTY -eq 1 ]; then tput setaf 6;  fi; }
+normalize () { if [ $ISTTY -eq 1 ]; then tput sgr0; fi; }
+
+echo_bold ()      { echo -e "$(bold)$1$(normalize)"; }
+echo_underline () { echo -e "\033[4m$1$(normalize)"; }
+echo_color ()     { echo -e "$2$1$(normalize)"; }
+
+function check_for_updates() {
+    curl --silent https://raw.githubusercontent.com/stuntcoders/stunt_wprest_publishing_analyzer/master/wpanalyzer.sh > __wpanalyzer.temp
+
+    if ! diff $0 "__wpanalyzer.temp" > /dev/null ; then
+        echo "$(red)New version available$(normalize)"
+        echo "Run \"$(green)wpanalyzer update$(normalize)\" to update to latest version"
+    else
+        echo "You have latest version of wpanalyzer"
+    fi
+
+    rm -r __wpanalyzer.temp
+}
+
+function self_update() {
+    sudo rm -f wpanalyzer.sh /usr/local/bin/wpanalyzer
+    wget https://raw.githubusercontent.com/stuntcoders/stunt_wprest_publishing_analyzer/master/wpanalyzer.sh
+    sudo chmod +x ./wpanalyzer.sh
+    sudo mv ./wpanalyzer.sh /usr/local/bin/wpanalyzer
+
+    echo "$(green)wpanalyzer updated to latest version!$(normalize)"
+    exit 0;
+}
+
+if [ "$1" = "update" ]; then
+	self_update
+	exit $?
+fi
+
+if [ "$1" = "version-check" ]; then
+    check_for_updates
+    exit $?
+fi
+
 if [ -z "$2" ]; then
 	PROTOCOL="https"
 else
@@ -60,6 +105,16 @@ echo "----------------"
 echo "Median edits per article: $MEDIAN_EDIT_PER_ARTICLE"
 echo "Total number of articles: $COUN"
 echo "Median articles pr month: $MEDI"
+
+tail -n +2 $STORAGE_FILE > $TEMP_FILE
+
+gnuplot << EOF
+set terminal png
+set output 'stuntcoders.com.csv.png'
+set style data linespoints
+set datafile separator ','
+plot '$TEMP_FILE'
+EOF
 
 echo "----------------"
 echo "CSV with number of articles published per month can be found in following file: $STORAGE_FILE"

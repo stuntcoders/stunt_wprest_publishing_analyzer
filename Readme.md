@@ -4,6 +4,7 @@ Script depends on:
 * [csvkit](https://csvkit.readthedocs.io/en/0.9.1/install.html)
 * [gawk](https://www.gnu.org/software/gawk/)
 * [jsonv](https://github.com/archan937/jsonv.sh)
+* [gnuplot](http://www.gnuplot.info/download.html)
 
 To run it, first install the tool:
 ```

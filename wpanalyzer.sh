@@ -75,6 +75,7 @@ MAXI=`csvstat -c 1 --max $STORAGE_FILE`
 COUN=`csvstat -c 1 --count $STORAGE_FILE | awk -F "\"* \"*" '{print $3}'`
 MEDIAN_EDIT_PER_ARTICLE=$((($MINI+$MAXI)/$COUN))
 
+
 MINI_D=`csvstat -c 2 --min $STORAGE_FILE`
 MAXI_D=`csvstat -c 2 --max $STORAGE_FILE`
 
@@ -101,10 +102,23 @@ done
 csvsort -c 1 --reverse $STORAGE_FILE > $TEMP_FILE
 mv $TEMP_FILE $STORAGE_FILE
 
+# Get stats for the last 3 and 6 months
+head -n +7 $STORAGE_FILE > $TEMP_FILE
+MEDI_6=`csvstat -c 2 --mean $TEMP_FILE | awk '{print int($1)}'`
+
+head -n +4 $STORAGE_FILE > $TEMP_FILE
+MEDI_3=`csvstat -c 2 --mean $TEMP_FILE | awk '{print int($1)}'`
+
+rm $TEMP_FILE
+
 echo "----------------"
 echo "Median edits per article: $MEDIAN_EDIT_PER_ARTICLE"
 echo "Total number of articles: $COUN"
-echo "Median articles pr month: $MEDI"
+
+echo "----------------"
+echo "Median articles per month when publishing: $MEDI"
+echo "Median articles pr month in last 6 months: $MEDI_6"
+echo "Median articles pr month in last 3 months: $MEDI_3"
 
 tail -n +2 $STORAGE_FILE > $TEMP_FILE
 

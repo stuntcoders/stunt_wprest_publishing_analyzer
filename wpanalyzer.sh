@@ -118,15 +118,22 @@ echo "Median edits per article: $MEDIAN_EDIT_PER_ARTICLE"
 echo "Total number of articles: $COUN"
 
 output_br
-if [ $MEDI_3 -gt $MEDI ]; then
+if [ $(($MEDI_3+$MEDI_6)) -gt $(($MEDI*18/10)) ]; then
 	echo "$(green)Stats are looking good!"
-else
+elif [ $(($MEDI_3+$MEDI_6)) -lt $(($MEDI*18/10)) ]; then
 	echo "$(red)Stats are looking bad. :("
+else
+	echo "$(yellow)Stats are pretty much leveled..."
 fi
 
 echo "Median articles per month when publishing: $MEDI"
 echo "Median articles pr month in last 6 months: $MEDI_6"
 echo "Median articles pr month in last 3 months: $MEDI_3"
+
+if [ $MEDI -lt  3]; then
+	echo "$(cyan)$(bold)Keep in mind that median number of articles is lower than 3."
+fi
+
 echo "$(normalize)"
 
 tail -n +2 $STORAGE_FILE > $TEMP_FILE

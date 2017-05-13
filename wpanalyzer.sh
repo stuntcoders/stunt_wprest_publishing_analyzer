@@ -116,9 +116,16 @@ echo "Median edits per article: $MEDIAN_EDIT_PER_ARTICLE"
 echo "Total number of articles: $COUN"
 
 echo "----------------"
+if [ $MEDI_3 -gt $MEDI ]; then
+	echo "$(green)Stats are looking good!"
+else
+	echo "$(red)Stats are looking bad. :("
+fi
+
 echo "Median articles per month when publishing: $MEDI"
 echo "Median articles pr month in last 6 months: $MEDI_6"
 echo "Median articles pr month in last 3 months: $MEDI_3"
+echo "$(normalize)"
 
 tail -n +2 $STORAGE_FILE > $TEMP_FILE
 

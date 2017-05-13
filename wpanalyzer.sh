@@ -12,6 +12,8 @@ echo_bold ()      { echo -e "$(bold)$1$(normalize)"; }
 echo_underline () { echo -e "\033[4m$1$(normalize)"; }
 echo_color ()     { echo -e "$2$1$(normalize)"; }
 
+output_br () { echo -e "-----------------------------"; }
+
 function check_for_updates() {
     curl --silent https://raw.githubusercontent.com/stuntcoders/stunt_wprest_publishing_analyzer/master/wpanalyzer.sh > __wpanalyzer.temp
 
@@ -111,11 +113,11 @@ MEDI_3=`csvstat -c 2 --mean $TEMP_FILE | awk '{print int($1)}'`
 
 rm $TEMP_FILE
 
-echo "----------------"
+output_br
 echo "Median edits per article: $MEDIAN_EDIT_PER_ARTICLE"
 echo "Total number of articles: $COUN"
 
-echo "----------------"
+output_br
 if [ $MEDI_3 -gt $MEDI ]; then
 	echo "$(green)Stats are looking good!"
 else
@@ -138,6 +140,7 @@ plot '$TEMP_FILE'
 EOF
 rm $TEMP_FILE
 
-echo "----------------"
+output_br
 echo "CSV with number of articles published per month can be found in following file: $(green)$STORAGE_FILE$(normalize)"
 echo "Graph can be found here: $(green)$STORAGE_FILE.png$(normalize)"
+output_br

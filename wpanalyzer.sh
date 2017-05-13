@@ -38,8 +38,8 @@ function self_update() {
 }
 
 if [ "$1" = "update" ]; then
-	self_update
-	exit $?
+    self_update
+    exit $?
 fi
 
 if [ "$1" = "version-check" ]; then
@@ -48,9 +48,9 @@ if [ "$1" = "version-check" ]; then
 fi
 
 if [ -z "$2" ]; then
-	PROTOCOL="https"
+    PROTOCOL="https"
 else
-	PROTOCOL=$2
+    PROTOCOL=$2
 fi
 
 URL="https://$1/wp-json/wp/v2/posts?per_page=100"
@@ -119,11 +119,11 @@ echo "Total number of articles: $COUN"
 
 output_br
 if [ $(($MEDI_3+$MEDI_6)) -gt $(($MEDI*18/10)) ]; then
-	echo "$(green)Stats are looking good!"
+    echo "$(green)Stats are looking good!"
 elif [ $(($MEDI_3+$MEDI_6)) -lt $(($MEDI*18/10)) ]; then
-	echo "$(red)Stats are looking bad. :("
+    echo "$(red)Stats are looking bad. :("
 else
-	echo "$(yellow)Stats are pretty much leveled..."
+    echo "$(yellow)Stats are pretty much leveled..."
 fi
 
 echo "Median articles per month when publishing: $MEDI"
@@ -131,7 +131,7 @@ echo "Median articles pr month in last 6 months: $MEDI_6"
 echo "Median articles pr month in last 3 months: $MEDI_3"
 
 if [ $MEDI -lt  3]; then
-	echo "$(cyan)$(bold)Keep in mind that median number of articles is lower than 3."
+    echo "$(cyan)$(bold)Keep in mind that median number of articles is lower than 3."
 fi
 
 echo "$(normalize)"

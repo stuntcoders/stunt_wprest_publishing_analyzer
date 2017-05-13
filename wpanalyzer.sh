@@ -75,6 +75,7 @@ mv $TEMP_FILE $STORAGE_FILE
 MINI=`csvstat -c 1 --min $STORAGE_FILE`
 MAXI=`csvstat -c 1 --max $STORAGE_FILE`
 COUN=`csvstat -c 1 --count $STORAGE_FILE | awk -F "\"* \"*" '{print $3}'`
+STAT="LEVELED"
 MEDIAN_EDIT_PER_ARTICLE=$((($MINI+$MAXI)/$COUN))
 
 
@@ -120,8 +121,10 @@ echo "Total number of articles: $COUN"
 output_br
 if [ $(($MEDI_3+$MEDI_6)) -gt $(($MEDI*18/10)) ]; then
     echo "$(green)Stats are looking good!"
+    STAT="GOOD"
 elif [ $(($MEDI_3+$MEDI_6)) -lt $(($MEDI*18/10)) ]; then
     echo "$(red)Stats are looking bad. :("
+    STAT="BAD"
 else
     echo "$(yellow)Stats are pretty much leveled..."
 fi
@@ -130,24 +133,34 @@ echo "Median articles per month when publishing: $MEDI"
 echo "Median articles pr month in last 6 months: $MEDI_6"
 echo "Median articles pr month in last 3 months: $MEDI_3"
 
-if [ $MEDI -lt  3]; then
+if [ $MEDI -lt  3 ]; then
+    STAT="LOW"
     echo "$(cyan)$(bold)Keep in mind that median number of articles is lower than 3."
 fi
 
 echo "$(normalize)"
+output_br
 
-tail -n +2 $STORAGE_FILE > $TEMP_FILE
+if [ "$3" = "file" ]; then
+    if [ ! -f wpanalyzer.csv ]; then
+        echo "Domain,Median,Median 6 months,Median 3 months,Stat" > wpanalyzer.csv
+    fi
 
-gnuplot << EOF
+    echo "$1,$MEDI,$MEDI_6,$MEDI_3,$STAT" >> wpanalyzer.csv
+    rm $STORAGE_FILE
+else
+    tail -n +2 $STORAGE_FILE > $TEMP_FILE
+
+    gnuplot << EOF
 set terminal png
 set output '$STORAGE_FILE.png'
 set style data linespoints
 set datafile separator ','
 plot '$TEMP_FILE'
 EOF
-rm $TEMP_FILE
+    rm $TEMP_FILE
 
-output_br
-echo "CSV with number of articles published per month can be found in following file: $(green)$STORAGE_FILE$(normalize)"
-echo "Graph can be found here: $(green)$STORAGE_FILE.png$(normalize)"
-output_br
+    echo "CSV with number of articles published per month can be found in following file: $(green)$STORAGE_FILE$(normalize)"
+    echo "Graph can be found here: $(green)$STORAGE_FILE.png$(normalize)"
+    output_br
+fi

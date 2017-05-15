@@ -25,7 +25,10 @@ wpanalyzer example.com http
 
 Do you wish to analyze multiple sites and have all results stored in one file for better overview? You can do that like this:
 ```
-wpanalyzer example.com http file
+wpanalyzer site-one.com http file
+wpanalyzer site-two.com http file
+...
+open wpanalyzer.csv
 ```
 
 Copyright [StuntCoders](https://stuntcoders.com/)

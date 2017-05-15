@@ -75,7 +75,7 @@ mv $TEMP_FILE $STORAGE_FILE
 MINI=`csvstat -c 1 --min $STORAGE_FILE`
 MAXI=`csvstat -c 1 --max $STORAGE_FILE`
 COUN=`csvstat -c 1 --count $STORAGE_FILE | awk -F "\"* \"*" '{print $3}'`
-STAT="LEVELED"
+STAT="BALANCED"
 MEDIAN_EDIT_PER_ARTICLE=$((($MINI+$MAXI)/$COUN))
 
 

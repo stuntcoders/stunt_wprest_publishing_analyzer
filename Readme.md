@@ -23,4 +23,9 @@ Script is assuming website is running under https, so if particular website you 
 wpanalyzer example.com http
 ```
 
+Do you wish to analyze multiple sites and have all results stored in one file for better overview? You can do that like this:
+```
+wpanalyzer example.com http file
+```
+
 Copyright [StuntCoders](https://stuntcoders.com/)
